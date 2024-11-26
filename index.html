@@ -1,18 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Car Race Chat</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <title>Chat App</title>
 </head>
 <body>
-    <div id="chat">
-        <div id="messages"></div>
-        <input id="messageInput" type="text" placeholder="Scrie un mesaj...">
-        <button id="sendMessage">Trimite</button>
-    </div>
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="chat.js"></script>
+  <div id="chat">
+    <ul id="messages"></ul>
+    <form id="form">
+      <input id="input" autocomplete="off" /><button>Trimite</button>
+    </form>
+  </div>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io();
+
+    // Ascultă evenimentul "chat message"
+    socket.on("chat message", function (msg) {
+      const item = document.createElement("li");
+      item.textContent = msg;
+      document.getElementById("messages").appendChild(item);
+      window.scrollTo(0, document.body.scrollHeight);
+    });
+
+    // Trimite mesajul când formularul este trimis
+    const form = document.getElementById("form");
+    const input = document.getElementById("input");
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      if (input.value) {
+        socket.emit("chat message", input.value);
+        input.value = "";
+      }
+    });
+  </script>
 </body>
 </html>

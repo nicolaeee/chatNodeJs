@@ -1,4 +1,10 @@
 const socket = io();
+// Inițializează conexiunea la server
+// Poți adăuga evenimente personalizate aici
+socket.on("message", (data) => {
+  console.log("Mesaj primit:", data);
+});
+
 
 document.getElementById('sendMessage').addEventListener('click', () => {
     const message = document.getElementById('messageInput').value;
@@ -12,3 +18,5 @@ socket.on('broadcastMessage', (message) => {
     newMessage.textContent = message;
     messagesDiv.appendChild(newMessage);
 });
+
+
